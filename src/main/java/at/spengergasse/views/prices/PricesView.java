@@ -11,7 +11,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 import org.vaadin.lineawesome.LineAwesomeIconUrl;
 
 @PageTitle("Prices")
-@Route("empty2")
+@Route("prices")
 @Menu(order = 2, icon = LineAwesomeIconUrl.EURO_SIGN_SOLID)
 public class PricesView extends VerticalLayout {
 

@@ -11,7 +11,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 import org.vaadin.lineawesome.LineAwesomeIconUrl;
 
 @PageTitle("Medications")
-@Route("empty")
+@Route("medications")
 @Menu(order = 1, icon = LineAwesomeIconUrl.PILLS_SOLID)
 public class MedicationsView extends VerticalLayout {
 

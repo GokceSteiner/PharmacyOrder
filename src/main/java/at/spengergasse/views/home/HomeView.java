@@ -11,7 +11,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 import org.vaadin.lineawesome.LineAwesomeIconUrl;
 
 @PageTitle("Home")
-@Route("")
+@Route("home")
 @Menu(order = 0, icon = LineAwesomeIconUrl.HOME_SOLID)
 public class HomeView extends VerticalLayout {
 
