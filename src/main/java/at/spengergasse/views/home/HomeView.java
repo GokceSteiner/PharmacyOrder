@@ -1,8 +1,7 @@
 package at.spengergasse.views.home;
 
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
@@ -18,19 +17,54 @@ public class HomeView extends VerticalLayout {
     public HomeView() {
         setSpacing(false);
 
-        Image img = new Image("images/empty-plant.png", "placeholder plant");
-        img.setWidth("200px");
-        add(img);
+        setAlignItems(Alignment.CENTER);
 
-        H2 header = new H2("This place intentionally left empty");
-        header.addClassNames(Margin.Top.XLARGE, Margin.Bottom.MEDIUM);
-        add(header);
-        add(new Paragraph("It’s a place where you can grow your own UI 🤗"));
+        H1 company = new H1("Steiner Pharmacy");
+        company.getStyle()
+                .set("font-family", "cursive")
+                .set("font-size", "6rem")
+                .set("margin", "0");
 
-        setSizeFull();
-        setJustifyContentMode(JustifyContentMode.CENTER);
-        setDefaultHorizontalComponentAlignment(Alignment.CENTER);
-        getStyle().set("text-align", "center");
+        H2 subName = new H2("... Trusted care, fast service, better health ...");
+        subName.getStyle()
+                .set("margin", "0")
+                .set("color", "gray");
+
+        Image logo = new Image("images/logo.png", "Steiner Pharmacy Logo");
+        logo.setWidth("300px");
+
+        Paragraph line1 = new Paragraph("Willkommen bei Steiner Pharmacy – Ihrer vertrauensvollen Apotheke für Gesundheit, Wohlbefinden und persönliche Beratung. Unser Ziel ist es, Sie mit hochwertigen pharmazeutischen Produkten, kompetenter Betreuung und einem zuverlässigen Service bestmöglich zu unterstützen. Ihre Gesundheit steht bei uns an erster Stelle.");
+
+        line1.setWidth("500px");
+        line1.getStyle()
+                .set("font-size", "22px")
+                .set("line-height", "1.6")
+                .set("text-align", "left");
+
+        Paragraph line2 = new Paragraph("Bei Steiner Pharmacy verbinden wir moderne pharmazeutische Versorgung mit persönlicher Betreuung. Ob Medikamente, Gesundheitsprodukte oder individuelle Beratung – unser engagiertes Team steht Ihnen mit Fachwissen und Sorgfalt zur Seite. Wir legen großen Wert auf Qualität, Sicherheit und ein angenehmes Kundenerlebnis.");
+
+        line2.setWidth("500px");
+        line2.getStyle()
+                .set("font-size", "22px")
+                .set("line-height", "1.6")
+                .set("text-align", "left");
+
+        Paragraph line3 = new Paragraph("Als Ihre moderne Apotheke möchten wir Gesundheit einfach und zugänglich machen. Mit einem benutzerfreundlichen Service, schnellen Lösungen und einem starken Fokus auf Ihre Bedürfnisse ist Steiner Pharmacy Ihr zuverlässiger Partner für ein gesundes Leben – heute und in Zukunft.");
+
+        line3.setWidth("500px");
+        line3.getStyle()
+                .set("font-size", "22px")
+                .set("line-height", "1.6")
+                .set("text-align", "left");
+
+
+
+        H3 name = new H3("Steiner Pharmacy");
+        H3 street = new H3("Spengergasse 20");
+        H3 city = new H3("1050 Wien");
+        
+        add(company, subName, logo, line1 , line2, line3, name,street,city);
+
     }
 
 }
