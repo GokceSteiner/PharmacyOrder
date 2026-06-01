@@ -10,11 +10,12 @@ import java.util.stream.Collectors;
 @Service
 public class PharMedService
 {
-    private ArrayList<PharMed> pharMeds;
+    private static ArrayList<PharMed> pharMeds;
 
     public PharMedService()
     {
         pharMeds = new ArrayList<>(10000);
+        fillTestdatei();
     }
 
     public void fillTestdatei()
@@ -55,6 +56,14 @@ public class PharMedService
         pharMeds.add(new PharMed(LocalDate.of(2026, 4, 11), "Novartis", "Painkiller", 13.50, 99, true));
         pharMeds.add(new PharMed(LocalDate.of(2026, 4, 14), "Roche", "Antibiotic", 31.50, 52, false));
 
+    }
+
+    public static ArrayList<PharMed> findAll()
+    {
+        ArrayList<PharMed> clone;
+        clone = new ArrayList<>(pharMeds);
+
+        return clone;
     }
 
     @Override
