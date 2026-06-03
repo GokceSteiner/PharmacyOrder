@@ -67,6 +67,12 @@ public class PharMedService
 
     }
 
+    public static void addWrong()
+    {
+        pharMeds.add(new PharMed(LocalDate.of(2026, 1, 5), "Merck", "Painkiller", 1.0, 120, true));
+
+    }
+
     public void fillTestdatei()
     {
         pharMeds.add(new PharMed(LocalDate.of(2026, 1, 5), "Merck", "Painkiller", 9.99, 120, true));
