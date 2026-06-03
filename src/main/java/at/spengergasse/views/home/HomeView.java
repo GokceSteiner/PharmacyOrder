@@ -27,7 +27,7 @@ public class HomeView extends VerticalLayout {
         HorizontalLayout logoText = new HorizontalLayout();
 
 
-        Image logo = new Image("images/logo.png", "Steiner Pharmacy Logo");
+        Image logo = new Image("images/rezept.png", "Steiner Pharmacy Logo");
         logo.setWidth("400px");
 
         Paragraph line1 = new Paragraph("Willkommen bei Steiner Pharmacy – Ihrer vertrauensvollen Apotheke für Gesundheit, Wohlbefinden und persönliche Beratung. Unser Ziel ist es, Sie mit hochwertigen pharmazeutischen Produkten, kompetenter Betreuung und einem zuverlässigen Service bestmöglich zu unterstützen. Ihre Gesundheit steht bei uns an erster Stelle.");

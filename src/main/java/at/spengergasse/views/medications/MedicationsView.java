@@ -4,11 +4,13 @@ import at.spengergasse.domain.PharMed;
 import at.spengergasse.domain.PharMedException;
 import at.spengergasse.service.PharMedService;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.crud.CrudI18n;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Menu;
@@ -32,7 +34,7 @@ public class MedicationsView extends VerticalLayout {
     private  final Button ButtonIncreasePrice = new Button("Increase Price");
     private final Button ButtonRemoveRezeptflicht = new Button("Remove Rezetpflicht");
     private final Button ButtonAddWrong = new Button("Add Wrong");
-    private final Grid<PharMed> grid = new Grid<>(PharMed.class, true); //nimm alle eigensachaften von klasse PharMed und erstell mir
+    private final Grid<PharMed> grid = new Grid<>(PharMed.class, false); //nimm alle eigensachaften von klasse PharMed und erstell mir
     private final PharMedService pharMedService;
 
     public MedicationsView(@Autowired PharMedService pharMedService) {
@@ -51,6 +53,43 @@ public class MedicationsView extends VerticalLayout {
 
         add(new HorizontalLayout(ButtonRemoveAllMedications, ButtonAdd10Medications, ButtonIncreasePrice,ButtonRemoveRezeptflicht, ButtonAddWrong));
 
+        grid.addColumn(med-> med.getMedicationId())
+                .setHeader("Medication ID")
+                .setSortable(true);
+        grid.addColumn(med -> med.getMedicationType())
+                .setHeader("Medication Type")
+                .setSortable(true);
+        grid.addColumn(med -> med.getOrderDate())
+                .setHeader("Order Date")
+                .setSortable(true);
+        grid.addColumn(med -> med.getPrice())
+                .setHeader("Price")
+                .setSortable(true);
+
+        Image l = new Image("icons/rezept.png", "type");
+        l.setWidth("22px");
+        HorizontalLayout headerType = new HorizontalLayout(l, new Span("type"));
+
+
+        grid.addColumn(med -> (med.getRezeptFrei() == true)? "rezeptfrei" : "rezeptpflichtig")
+                .setHeader(headerType)
+                .setSortable(true);
+
+
+        grid.addColumn(med-> med.getStockQuantity())
+                .setHeader("Stock Quantity")
+                .setSortable(true);
+        grid.addColumn(med -> med.getSupplierName())
+                .setHeader("Supplier Name")
+                .setSortable(true);
+        grid.addComponentColumn( med ->
+        {
+            Checkbox rezept = new Checkbox(med.getRezeptFrei());
+            rezept.setReadOnly(true);
+            return rezept;
+        })
+                .setHeader("no-Prescription")
+                .setSortable(true);
 
         add(grid);
         reload();
