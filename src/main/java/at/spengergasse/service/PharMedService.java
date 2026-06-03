@@ -1,21 +1,70 @@
 package at.spengergasse.service;
 
 import at.spengergasse.domain.PharMed;
+import com.vaadin.copilot.shaded.javassist.bytecode.Descriptor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.stream.Collectors;
 
 @Service
 public class PharMedService
 {
-    private static ArrayList<PharMed> pharMeds;
+    public static ArrayList<PharMed> pharMeds;
 
     public PharMedService()
     {
         pharMeds = new ArrayList<>(10000);
         fillTestdatei();
+    }
+
+    public static void removeAllMedications()
+    {
+        pharMeds.clear();
+    }
+
+    public static void add10Medication()
+    {
+        pharMeds.add(new PharMed(LocalDate.of(2026, 1, 5), "Merck", "Painkiller", 9.99, 120, true));
+        pharMeds.add(new PharMed(LocalDate.of(2026, 1, 8), "Bayer", "Antibiotic", 24.50, 80, false));
+        pharMeds.add(new PharMed(LocalDate.of(2026, 1, 12), "Pfizer", "Anti-allergy", 14.90, 65, true));
+        pharMeds.add(new PharMed(LocalDate.of(2026, 1, 15), "Novartis", "Nasal Spray", 7.99, 150, true));
+        pharMeds.add(new PharMed(LocalDate.of(2026, 1, 18), "Roche", "Painkiller", 12.49, 90, false));
+
+        pharMeds.add(new PharMed(LocalDate.of(2026, 2, 1), "Merck", "Antibiotic", 28.99, 70, false));
+        pharMeds.add(new PharMed(LocalDate.of(2026, 2, 3), "Bayer", "Anti-allergy", 16.99, 110, true));
+        pharMeds.add(new PharMed(LocalDate.of(2026, 2, 6), "Pfizer", "Nasal Spray", 8.49, 130, true));
+        pharMeds.add(new PharMed(LocalDate.of(2026, 2, 9), "Novartis", "Painkiller", 10.99, 95, true));
+        pharMeds.add(new PharMed(LocalDate.of(2026, 2, 12), "Roche", "Antibiotic", 32.99, 50, false));
+    }
+
+    public static void increasePrice()
+    {
+        for(PharMed p : pharMeds)
+        {
+            p.setPrice(p.getPrice()+1.0);
+        }
+    }
+
+    public static void removeRezeptpflicht()
+    {
+       Iterator<PharMed> t;
+       t = pharMeds.iterator();
+
+       PharMed p;
+
+       while(t.hasNext())
+       {
+           p = t.next();
+
+           if(p.getRezeptFrei() == false)
+           {
+               t.remove();
+           }
+       }
+
     }
 
     public void fillTestdatei()
