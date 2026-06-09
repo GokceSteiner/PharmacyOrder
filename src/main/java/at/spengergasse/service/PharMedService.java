@@ -1,6 +1,7 @@
 package at.spengergasse.service;
 
 import at.spengergasse.domain.PharMed;
+import at.spengergasse.domain.PharMedException;
 import com.vaadin.copilot.shaded.javassist.bytecode.Descriptor;
 import org.springframework.stereotype.Service;
 
@@ -71,6 +72,41 @@ public class PharMedService
     {
         pharMeds.add(new PharMed(LocalDate.of(2026, 1, 5), "Merck", "Painkiller", 1.0, 120, true));
 
+    }
+
+    public static void removeMedId(Long medicationId)
+    {
+        PharMed med = null;
+
+        for(PharMed p :pharMeds)
+        {
+            if(p.getMedicationId().equals(medicationId))
+            {
+                p = med;
+            }
+        }
+
+        pharMeds.remove(med);
+
+        if(pharMeds.removeIf(p-> p.getMedicationId().equals(medicationId)) == false)
+            throw new PharMedException("Medication ist nicht vorhanden!");
+        if(medicationId == null)
+            throw new PharMedException("Medication ist nicht vorhanden!");
+
+    }
+
+    public static void add1Med(Long medicationId)
+    {
+        for(PharMed p : pharMeds)
+        {
+            if(p.getMedicationId().equals(medicationId))
+            {
+                p.setStockQuantity(p.getStockQuantity()+1);
+            }
+        }
+
+        if(medicationId == null)
+            throw new PharMedException("kein Medikament ist vorhanden");
     }
 
     public void fillTestdatei()

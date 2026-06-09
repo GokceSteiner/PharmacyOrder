@@ -90,10 +90,54 @@ public class MedicationsView extends VerticalLayout {
         })
                 .setHeader("no-Prescription")
                 .setSortable(true);
+        grid.addComponentColumn(med -> {
+            Button delete = new Button("delete");
+            delete.addClickListener(e -> removeMedId(med.getMedicationId()));
+            return delete;
+        })
+                .setHeader("Action")
+                .setSortable(false);
+
+        grid.addComponentColumn(med-> {
+            Button add1Med = new Button("Add 1 Med");
+            add1Med.addClickListener(e-> add1Med(med.getMedicationId()));
+            return add1Med;
+        })
+                .setHeader("Action")
+                .setSortable(false);
 
         add(grid);
         reload();
 
+    }
+
+    private void add1Med(Long medicationId)
+    {
+        try
+        {
+            PharMedService.add1Med(medicationId);
+            reload();
+        }
+
+        catch (PharMedException e)
+        {
+            Notification.show(e.getMessage());
+        }
+
+
+    }
+
+    private void removeMedId(Long medicationId)
+    {
+        try
+        {
+            PharMedService.removeMedId(medicationId);
+            reload();
+        }
+        catch (PharMedException e)
+        {
+            Notification.show(e.getMessage());
+        }
     }
 
     private void addWrong()
