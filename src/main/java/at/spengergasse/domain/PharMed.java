@@ -2,6 +2,7 @@ package at.spengergasse.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -20,15 +21,26 @@ public class PharMed implements Cloneable
 {
     @Id
     private Long medicationId;
+    @NotNull(message = "Order Date is required!")
     private LocalDate orderDate;
+    @NotBlank(message = "Supplier Name is required!")
     private String supplierName;
+    @NotNull(message = "Medication Type is required!")
+    @Pattern(
+            regexp = "Painkiller|Antibiotics|Anti-allergy|Nasal Spray",
+            message = "The medication types must be Painkiller, Antibiotics, Anti-allergy and Nasal Spray!"
+    )
     private String medicationType;
+    @NotNull(message = "Price is required")
+    @DecimalMin(value = "2.0", message = "Minimum Price is 2 Euro!")
+    @DecimalMax(value = "300.0", message = "Maximum Price is 300 Euro")
     private Double price;
+    @NotNull(message = "Stock quantity is required!")
     private Integer stockQuantity;
+    @NotNull(message = "Precription Requirement must be registered ")
     private Boolean rezeptFrei;
 
     private static final AtomicLong sequence = new AtomicLong(1000);
-    private static final String[] medicationTypes = {"Painkiller", "Antibiotic", "Anti-allergy" ,"Nasal Spray"};
 
     public PharMed()
     {
@@ -85,10 +97,6 @@ public class PharMed implements Cloneable
 
     public void setMedicationTypes(String medicationType)
     {
-        if(!Arrays.asList(medicationTypes).contains(medicationType))
-        {
-            throw new PharMedException("Unknown medication type!");
-        }
 
         this.medicationType = medicationType;
     }
