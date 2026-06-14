@@ -44,14 +44,13 @@ public class PharMed implements Cloneable
 
     public PharMed()
     {
-        // Wir brauchen kein Set MEthode in dem voll Konstruktor!!
-        //setMedicationId();
-        //setOrderDate(LocalDate.now());
-        //setSupplierName("Merck");
-        //setMedicationType("Schmerzmittel");
-        //setPrice(15.99);
-        //setStockQuantity(105);
-        //setRezeptFrei(false);
+        setMedicationId();
+        setOrderDate(LocalDate.now());
+        setSupplierName("Unknown");
+        setMedicationType("Painkiller");
+        setPrice(15.99);
+        setStockQuantity(105);
+        setRezeptFrei(false);
     }
 
     public PharMed(LocalDate orderDate, String supplierName, String medicationType, Double price, Integer stockQuantity, Boolean rezeptFrei)

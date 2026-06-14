@@ -109,6 +109,16 @@ public class PharMedService
             throw new PharMedException("kein Medikament ist vorhanden");
     }
 
+    public static void add1Order(PharMed pharMed)
+    {
+        if(pharMed==null)
+        {
+            throw new PharMedException("No Medication!!");
+        }
+        pharMeds.add(pharMed);
+    }
+
+
     public void fillTestdatei()
     {
         pharMeds.add(new PharMed(LocalDate.of(2026, 1, 5), "Merck", "Painkiller", 9.99, 120, true));

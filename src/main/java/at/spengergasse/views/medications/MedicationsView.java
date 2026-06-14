@@ -5,7 +5,10 @@ import at.spengergasse.domain.PharMedException;
 import at.spengergasse.service.PharMedService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.crud.CrudI18n;
+import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
@@ -13,13 +16,20 @@ import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.NumberField;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
+import jakarta.validation.constraints.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.lineawesome.LineAwesomeIconUrl;
 import com.vaadin.flow.component.notification.Notification;
+
+import java.time.LocalDate;
 
 import static at.spengergasse.service.PharMedService.pharMeds;
 import static javax.management.Notification.*;
@@ -34,6 +44,7 @@ public class MedicationsView extends VerticalLayout {
     private  final Button ButtonIncreasePrice = new Button("Increase Price");
     private final Button ButtonRemoveRezeptflicht = new Button("Remove Rezetpflicht");
     private final Button ButtonAddWrong = new Button("Add Wrong");
+    private final Button ButtonAdd1Order = new Button("Add Order");
     private final Grid<PharMed> grid = new Grid<>(PharMed.class, false); //nimm alle eigensachaften von klasse PharMed und erstell mir
     private final PharMedService pharMedService;
 
@@ -50,8 +61,9 @@ public class MedicationsView extends VerticalLayout {
         ButtonIncreasePrice.addClickListener(e -> increasePrice());
         ButtonRemoveRezeptflicht.addClickListener(e-> removeRezeptpflicht());
         ButtonAddWrong.addClickListener(e-> addWrong());
+        ButtonAdd1Order.addClickListener(event-> add1Order());
 
-        add(new HorizontalLayout(ButtonRemoveAllMedications, ButtonAdd10Medications, ButtonIncreasePrice,ButtonRemoveRezeptflicht, ButtonAddWrong));
+        add(new HorizontalLayout(ButtonRemoveAllMedications, ButtonAdd10Medications, ButtonIncreasePrice,ButtonRemoveRezeptflicht, ButtonAddWrong, ButtonAdd1Order));
 
         grid.addColumn(med-> med.getMedicationId())
                 .setHeader("Medication ID")
@@ -110,6 +122,89 @@ public class MedicationsView extends VerticalLayout {
         reload();
 
     }
+
+    private void add1Order()
+    {
+        Dialog dialog;
+
+        dialog =new Dialog();
+        dialog.setHeaderTitle(" Add 1 Order");
+
+        TextField medicationID = new TextField("Medication ID");
+        DatePicker orderDate = new DatePicker("Order Date");
+        TextField supplierName = new TextField("Supplier Name");
+        ComboBox medicationType = new ComboBox("Medication Type");
+        medicationType.setItems("Painkiller","Antibiotics","Anti-allergy" , "Nasal Spray");
+        NumberField price = new NumberField("Price");
+        IntegerField stockQuantity = new IntegerField("Stock Quantity");
+        Checkbox rezeptFrei = new Checkbox("Rezeptfrei");
+
+        BeanValidationBinder<PharMed> binder = new BeanValidationBinder<>(PharMed.class);
+
+        //Do not bind ID Field!!!
+        binder.forField(orderDate)
+                .bind("orderDate");
+
+        binder.forField(supplierName)
+                .bind("supplierName"); //bind(String propertyName) nutzt Reflection, um automatisch den passenden Getter und Setter der Bean zu finden. Vaadin sucht dann nach getOrderDate() / setOrderDate() in der gebundenen Klasse (z.B. Order).
+        binder.forField(medicationType)
+                .bind("medicationType");
+        binder.forField(price)
+                .bind("price");
+        binder.forField(stockQuantity)
+                .bind("stockQuantity");
+        binder.forField(rezeptFrei)
+                .bind("rezeptFrei");
+
+
+        PharMed pharMed = new PharMed();
+        binder.setBean(pharMed);
+
+        medicationID.setValue(""+pharMed.getMedicationId());
+        medicationID.setReadOnly(true);
+
+        VerticalLayout formLayout = new VerticalLayout(
+                medicationID,
+                orderDate,
+                supplierName,
+                medicationType,
+                price,
+                stockQuantity,
+                rezeptFrei
+        );
+
+        Button buttonOk = new Button("ok");
+        Button buttonCancel = new Button("cancel");
+
+        buttonCancel.addClickListener(event-> dialog.close());
+        buttonOk.addClickListener(event ->
+        {
+            try
+            {
+                if(binder.validate().isOk() ==true)
+                {
+                    PharMedService.add1Order(pharMed);
+                    dialog.close();
+                    reload();
+                    Notification.show("One Medication added");
+                }
+                else
+                {
+                    Notification.show("Check your input!");
+                }
+            }
+            catch (PharMedException e)
+            {
+                Notification.show(e.getMessage());
+            }
+        });
+
+        dialog.add(formLayout);
+        dialog.getFooter().add(buttonOk,buttonCancel);
+        dialog.open();
+
+    }
+
 
     private void add1Med(Long medicationId)
     {
