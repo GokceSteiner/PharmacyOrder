@@ -61,7 +61,7 @@ public class MedicationsView extends VerticalLayout {
         ButtonIncreasePrice.addClickListener(e -> increasePrice());
         ButtonRemoveRezeptflicht.addClickListener(e-> removeRezeptpflicht());
         ButtonAddWrong.addClickListener(e-> addWrong());
-        ButtonAdd1Order.addClickListener(event-> add1Order());
+        ButtonAdd1Order.addClickListener(event-> addEditOrder(null));
 
         add(new HorizontalLayout(ButtonRemoveAllMedications, ButtonAdd10Medications, ButtonIncreasePrice,ButtonRemoveRezeptflicht, ButtonAddWrong, ButtonAdd1Order));
 
@@ -118,17 +118,37 @@ public class MedicationsView extends VerticalLayout {
                 .setHeader("Action")
                 .setSortable(false);
 
+        grid.addComponentColumn(med ->
+        {
+            Button editMed = new Button("Edit");
+            editMed.addClickListener(e-> addEditOrder(med));
+            return editMed;
+        })
+                .setHeader("Action")
+                .setSortable(false);
+
         add(grid);
         reload();
 
     }
 
-    private void add1Order()
+    private void addEditOrder(PharMed existingOrder)
     {
         Dialog dialog;
 
         dialog =new Dialog();
-        dialog.setHeaderTitle(" Add 1 Order");
+        PharMed pharMed;
+        if(existingOrder == null)
+        {
+            dialog.setHeaderTitle(" Add 1 Order");
+            pharMed = new PharMed();
+        }
+        else
+        {
+            dialog.setHeaderTitle(" Edit Order");
+            pharMed = existingOrder;
+        }
+
 
         TextField medicationID = new TextField("Medication ID");
         DatePicker orderDate = new DatePicker("Order Date");
@@ -157,7 +177,7 @@ public class MedicationsView extends VerticalLayout {
                 .bind("rezeptFrei");
 
 
-        PharMed pharMed = new PharMed();
+
         binder.setBean(pharMed);
 
         medicationID.setValue(""+pharMed.getMedicationId());
@@ -183,10 +203,21 @@ public class MedicationsView extends VerticalLayout {
             {
                 if(binder.validate().isOk() ==true)
                 {
-                    PharMedService.add1Order(pharMed);
+                    if(existingOrder == null)
+                    {
+                        PharMedService.add1Order(pharMed);
+                    }
                     dialog.close();
                     reload();
-                    Notification.show("One Medication added");
+
+                    if(existingOrder == null)
+                    {
+                        Notification.show("One Medication added");
+                    }
+                    else
+                    {
+                        Notification.show("One Medication modified");
+                    }
                 }
                 else
                 {

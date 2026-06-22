@@ -22,6 +22,7 @@ public class PharMed implements Cloneable
     @Id
     private Long medicationId;
     @NotNull(message = "Order Date is required!")
+    @Past(message = "Order Date must be in the past!")
     private LocalDate orderDate;
     @NotBlank(message = "Supplier Name is required!")
     private String supplierName;
