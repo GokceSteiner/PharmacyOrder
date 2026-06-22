@@ -1,6 +1,8 @@
 package at.spengergasse.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -20,6 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class PharMed implements Cloneable
 {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long medicationId;
     @NotNull(message = "Order Date is required!")
     @Past(message = "Order Date must be in the past!")
@@ -41,11 +44,9 @@ public class PharMed implements Cloneable
     @NotNull(message = "Precription Requirement must be registered ")
     private Boolean rezeptFrei;
 
-    private static final AtomicLong sequence = new AtomicLong(1000);
 
     public PharMed()
     {
-        setMedicationId();
         setOrderDate(LocalDate.now());
         setSupplierName("Unknown");
         setMedicationType("Painkiller");
@@ -56,7 +57,6 @@ public class PharMed implements Cloneable
 
     public PharMed(LocalDate orderDate, String supplierName, String medicationType, Double price, Integer stockQuantity, Boolean rezeptFrei)
     {
-        setMedicationId();
         setOrderDate(orderDate);
         setSupplierName(supplierName);
         setMedicationType(medicationType);
@@ -67,7 +67,6 @@ public class PharMed implements Cloneable
 
     public PharMed(Long medicationId, LocalDate orderDate, String supplierName, String medicationType, Double price, Integer stockQuantity, Boolean rezeptFrei)
     {
-        setMedicationId(medicationId);
         setOrderDate(orderDate);
         setSupplierName(supplierName);
         setMedicationType(medicationType);
@@ -76,10 +75,6 @@ public class PharMed implements Cloneable
         setRezeptFrei(rezeptFrei);
     }
 
-    public void setMedicationId() // weil Id von AtomicLong vergegeben wird, brauchen wir hier kein parameter
-    {
-        medicationId = sequence.getAndIncrement();  // get die Nummer und erhöhe
-    }
 
     public void setPrice(Double price)
     {

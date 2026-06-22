@@ -31,7 +31,7 @@ import com.vaadin.flow.component.notification.Notification;
 
 import java.time.LocalDate;
 
-import static at.spengergasse.service.PharMedService.pharMeds;
+/*import static at.spengergasse.service.PharMedService.pharMeds;*/
 import static javax.management.Notification.*;
 
 @PageTitle("Medications")
@@ -135,9 +135,10 @@ public class MedicationsView extends VerticalLayout {
     private void addEditOrder(PharMed existingOrder)
     {
         Dialog dialog;
+        PharMed pharMed;
 
         dialog =new Dialog();
-        PharMed pharMed;
+
         if(existingOrder == null)
         {
             dialog.setHeaderTitle(" Add 1 Order");
@@ -203,10 +204,7 @@ public class MedicationsView extends VerticalLayout {
             {
                 if(binder.validate().isOk() ==true)
                 {
-                    if(existingOrder == null)
-                    {
-                        PharMedService.add1Order(pharMed);
-                    }
+                    pharMedService.add1Order(pharMed);
                     dialog.close();
                     reload();
 
@@ -230,6 +228,8 @@ public class MedicationsView extends VerticalLayout {
             }
         });
 
+        buttonCancel.addClickListener(event -> dialog.close());
+
         dialog.add(formLayout);
         dialog.getFooter().add(buttonOk,buttonCancel);
         dialog.open();
@@ -241,7 +241,7 @@ public class MedicationsView extends VerticalLayout {
     {
         try
         {
-            PharMedService.add1Med(medicationId);
+            pharMedService.add1Med(medicationId);
             reload();
         }
 
@@ -257,7 +257,7 @@ public class MedicationsView extends VerticalLayout {
     {
         try
         {
-            PharMedService.removeMedId(medicationId);
+            pharMedService.removeMedId(medicationId);
             reload();
         }
         catch (PharMedException e)
@@ -271,7 +271,7 @@ public class MedicationsView extends VerticalLayout {
 
         try
         {
-            PharMedService.addWrong();
+            pharMedService.addWrong();
             reload();
         }
         catch (PharMedException e)
@@ -284,7 +284,7 @@ public class MedicationsView extends VerticalLayout {
     {
         try
         {
-            PharMedService.removeRezeptpflicht();
+            pharMedService.removeRezeptpflicht();
             reload();
         }
         catch (PharMedException e)
@@ -298,7 +298,7 @@ public class MedicationsView extends VerticalLayout {
     {
         try
         {
-            PharMedService.increasePrice();
+            pharMedService.increasePrice();
             reload();
         }
         catch (PharMedException e)
@@ -311,7 +311,7 @@ public class MedicationsView extends VerticalLayout {
     {
         try
         {
-            PharMedService.add10Medication();
+            pharMedService.add10Medication();
             ButtonRemoveAllMedications.setEnabled(true);
             ButtonRemoveRezeptflicht.setEnabled(true);
             reload();
@@ -326,7 +326,7 @@ public class MedicationsView extends VerticalLayout {
     {
         try
         {
-            PharMedService.removeAllMedications();
+            pharMedService.removeAllMedications();
             ButtonRemoveAllMedications.setEnabled(false);
             ButtonRemoveRezeptflicht.setEnabled(false);
             reload();
@@ -339,7 +339,7 @@ public class MedicationsView extends VerticalLayout {
 
     private void reload() //wenn in Collection die Datei sich ändert, neu reloaden
     {
-        grid.setItems(PharMedService.findAll());
+        grid.setItems(pharMedService.findAll());
     }
 
 }
